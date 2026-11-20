@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TIGER WEB SCANNER V6</title><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body><header><div><b>🐯 TIGER WEB SCANNER</b><small>V6 · Authorized Security Review</small></div>
+<nav><a href="/">Dashboard</a><a href="/history">History</a></nav></header>
+<main>{% with messages = get_flashed_messages(with_categories=true) %}{% for category,msg in messages %}
+<div class="flash {{category}}">{{msg}}</div>{% endfor %}{% endwith %}
+{% block content %}{% endblock %}</main><footer>Local-first · Passive + controlled checks · No exploitation</footer></body></html>

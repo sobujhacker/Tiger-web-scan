@@ -1,0 +1,26 @@
+{% extends "base.html" %}{% block content %}
+<section class="hero"><div><span class="tag">ADVANCED WEB REVIEW</span><h1>TIGER WEB SCANNER V6</h1>
+<p class="creator">Created by <strong>Sobuj Hossen</strong></p>
+<p>পেজ আবিষ্কার, OWASP review, evidence, affected URL এবং remediation guidance.</p></div></section>
+<section class="panel"><h2>নতুন Scan</h2><form method="post" action="/scan">
+<label>Target URL</label><input name="target" type="url" placeholder="https://your-authorized-test-site.example" required>
+<details><summary>Authenticated test review (ঐচ্ছিক)</summary>
+<p class="hint">শুধু test account-এর short-lived session ব্যবহার করুন। Password দেবেন না। এই তথ্য রিপোর্টে সংরক্ষণ হয় না এবং app বন্ধ হলে মুছে যায়।</p>
+<label>Authorization header (যেমন Bearer test-token)</label><input name="auth" autocomplete="off" placeholder="Optional">
+<label>Session Cookie header</label><input name="cookie" autocomplete="off" placeholder="Optional">
+</details>
+<label class="check"><input type="checkbox" name="authorized" value="yes" required> আমি সাইটটির মালিক অথবা লিখিত অনুমতি আছে এবং test environment/account ব্যবহার করছি।</label>
+<button class="scan-button">🐯 TIGER SCANNER</button></form></section>
+{% if data %}
+<section class="stats"><div class="stat"><b>{{data.page_count}}</b><span>Pages reviewed</span></div>
+<div class="stat"><b>{{data.finding_count}}</b><span>Review items</span></div><div class="stat"><b>{{data.target}}</b><span>Target</span></div></section>
+<section class="panel"><div class="heading"><h2>OWASP & Security Findings</h2><div class="downloads"><a href="/report/pdf">PDF</a><a href="/report/json">JSON</a><a href="/report/txt">TXT</a></div></div>
+<div class="tablewrap"><table><thead><tr><th>Severity</th><th>Status</th><th>Vulnerability / Review</th><th>Affected page</th><th>Evidence & Fix</th></tr></thead><tbody>
+{% for f in data.findings %}<tr><td><span class="sev {{f.severity|lower}}">{{f.severity}}</span></td>
+<td>{{f.status}}</td><td><b>{{f.name}}</b><small>{{f.category}}</small></td>
+<td><a href="{{f.url}}" target="_blank" rel="noopener noreferrer">View affected page ↗</a><small class="url">{{f.url}}</small></td>
+<td>{{f.evidence}}<details><summary>Fix recommendation</summary>{{f.fix}}</details></td></tr>{% endfor %}
+</tbody></table></div></section>
+<section class="panel"><h2>Discovered Pages</h2><ul class="pages">{% for p in data.pages %}<li><a href="{{p.url}}" target="_blank" rel="noopener noreferrer">{{p.url}}</a><span>{{p.status}} · {{p.content_type}}</span></li>{% endfor %}</ul></section>
+{% else %}<section class="panel note"><b>শুরু করার আগে</b><p>শুধু নিজের বা অনুমতিপ্রাপ্ত সাইট স্ক্যান করুন। এই টুল exploit payload, form submission, file upload বা অন্য ব্যবহারকারীর ডেটা অ্যাক্সেস করে না।</p></section>{% endif %}
+{% endblock %}
